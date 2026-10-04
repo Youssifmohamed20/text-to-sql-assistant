@@ -1,0 +1,272 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Length 2875 >>
+stream
+0.12 w 54 746 m 558 746 l S
+BT /F2 9 Tf 54 765 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F1 8 Tf 520 30 Td (Page 1) Tj ET
+BT /F2 19 Tf 54 734 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F2 14 Tf 54 686 Td (1. Project Overview) Tj ET
+BT /F1 10 Tf 54 659 Td (This project implements a local Text-to-SQL assistant for the Chinook Music Store SQLite) Tj ET
+BT /F1 10 Tf 54 646 Td (database. The user asks a natural-language question in a Gradio interface. The system builds) Tj ET
+BT /F1 10 Tf 54 633 Td (live schema context from SQLite metadata, sends the question and schema to a local Ollama) Tj ET
+BT /F1 10 Tf 54 620 Td (model through LangChain, validates the generated SQL, executes only safe read-only queries,) Tj ET
+BT /F1 10 Tf 54 607 Td (and returns the generated SQL, explanation, result table, and status.) Tj ET
+BT /F1 10 Tf 54 586 Td (The project uses:) Tj ET
+BT /F1 10 Tf 66 565 Td (- Gradio for the UI.) Tj ET
+BT /F1 10 Tf 66 552 Td (- LangChain LCEL for the Text-to-SQL pipeline.) Tj ET
+BT /F1 10 Tf 66 539 Td (- Ollama with llama3.1:8b as the local LLM.) Tj ET
+BT /F1 10 Tf 66 526 Td (- SQLite for the Chinook database.) Tj ET
+BT /F1 10 Tf 66 513 Td (- Pandas for query results.) Tj ET
+BT /F1 10 Tf 66 500 Td (- sqlparse plus custom validation for safety checks.) Tj ET
+BT /F1 10 Tf 54 479 Td (Conversation memory for follow-up questions is intentionally not implemented in this) Tj ET
+BT /F1 10 Tf 54 466 Td (version.) Tj ET
+BT /F2 14 Tf 54 437 Td (2. Architecture Diagram) Tj ET
+BT /F3 9 Tf 64 410 Td (User question) Tj ET
+BT /F3 9 Tf 64 397 Td (  -> Gradio Blocks UI) Tj ET
+BT /F3 9 Tf 64 384 Td (  -> User input safety validation) Tj ET
+BT /F3 9 Tf 64 371 Td (  -> SQLite schema extraction) Tj ET
+BT /F3 9 Tf 64 358 Td (  -> LangChain ChatPromptTemplate) Tj ET
+BT /F3 9 Tf 64 345 Td (  -> Ollama ChatOllama model) Tj ET
+BT /F3 9 Tf 64 332 Td (  -> String output parser) Tj ET
+BT /F3 9 Tf 64 319 Td (  -> JSON extraction) Tj ET
+BT /F3 9 Tf 64 306 Td (  -> SQL safety validation) Tj ET
+BT /F3 9 Tf 64 293 Td (  -> Schema reference validation) Tj ET
+BT /F3 9 Tf 64 280 Td (  -> SQLite SELECT execution) Tj ET
+BT /F3 9 Tf 64 267 Td (  -> Optional one-step SQL repair on failure) Tj ET
+BT /F3 9 Tf 64 254 Td (  -> Pandas DataFrame) Tj ET
+BT /F3 9 Tf 64 241 Td (  -> Gradio SQL / explanation / results / status outputs) Tj ET
+BT /F3 9 Tf 64 228 Td (  -> Query log) Tj ET
+BT /F2 14 Tf 54 199 Td (3. Main Components) Tj ET
+BT /F2 11 Tf 54 164 Td (app.py) Tj ET
+BT /F1 10 Tf 54 140 Td (app.py defines the Gradio Blocks interface. It provides:) Tj ET
+BT /F1 10 Tf 66 119 Td (- A textbox for natural-language questions.) Tj ET
+BT /F1 10 Tf 66 106 Td (- A button and submit handler.) Tj ET
+BT /F1 10 Tf 66 93 Td (- A generated SQL textbox.) Tj ET
+BT /F1 10 Tf 66 80 Td (- An explanation textbox.) Tj ET
+BT /F1 10 Tf 66 67 Td (- A Gradio DataFrame for results.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3057 >>
+stream
+0.12 w 54 746 m 558 746 l S
+BT /F2 9 Tf 54 765 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F1 8 Tf 520 30 Td (Page 2) Tj ET
+BT /F1 10 Tf 66 734 Td (- A status/error textbox.) Tj ET
+BT /F1 10 Tf 66 721 Td (- Example questions.) Tj ET
+BT /F2 11 Tf 54 692 Td (sql_engine.py) Tj ET
+BT /F1 10 Tf 54 668 Td (sql_engine.py contains the main Text-to-SQL engine. It:) Tj ET
+BT /F1 10 Tf 66 647 Td (- Builds the LangChain chain: ChatPromptTemplate -> ChatOllama -> StrOutputParser.) Tj ET
+BT /F1 10 Tf 66 634 Td (- Loads Ollama settings from environment variables.) Tj ET
+BT /F1 10 Tf 66 621 Td (- Parses model output as JSON.) Tj ET
+BT /F1 10 Tf 66 608 Td (- Validates unsafe user questions before calling the model.) Tj ET
+BT /F1 10 Tf 66 595 Td (- Validates generated SQL before execution.) Tj ET
+BT /F1 10 Tf 66 582 Td (- Executes safe SQL through the database layer.) Tj ET
+BT /F1 10 Tf 66 569 Td (- Logs each question, generated SQL, and status.) Tj ET
+BT /F1 10 Tf 66 556 Td (- Attempts one general SQL repair step when validation or execution fails.) Tj ET
+BT /F2 11 Tf 54 527 Td (prompt_templates.py) Tj ET
+BT /F1 10 Tf 54 503 Td (prompt_templates.py defines the main system and user prompt templates. The prompt includes:) Tj ET
+BT /F1 10 Tf 66 482 Td (- {schema} for live database schema context.) Tj ET
+BT /F1 10 Tf 66 469 Td (- {question} for the user question.) Tj ET
+BT /F1 10 Tf 66 456 Td (- Strict SELECT-only rules.) Tj ET
+BT /F1 10 Tf 66 443 Td (- JSON output requirements.) Tj ET
+BT /F1 10 Tf 66 430 Td (- Few-shot examples.) Tj ET
+BT /F1 10 Tf 66 417 Td (- Generic analytical SQL guidance for grouped totals, averages, rankings, and top-per-) Tj ET
+BT /F1 10 Tf 66 404 Td (  group queries.) Tj ET
+BT /F1 10 Tf 54 383 Td (The analytical guidance is intentionally general and not hardcoded to the Chinook schema.) Tj ET
+BT /F2 11 Tf 54 354 Td (db_setup.py) Tj ET
+BT /F1 10 Tf 54 330 Td (db_setup.py handles the SQLite database. It:) Tj ET
+BT /F1 10 Tf 66 309 Td (- Locates Chinook_Sqlite.sqlite.) Tj ET
+BT /F1 10 Tf 66 296 Td (- Attempts to download the database automatically if it is missing.) Tj ET
+BT /F1 10 Tf 66 283 Td (- Opens SQLite connections.) Tj ET
+BT /F1 10 Tf 66 270 Td (- Extracts table names, columns, and foreign-key relationships.) Tj ET
+BT /F1 10 Tf 66 257 Td (- Builds compact schema context for the LLM.) Tj ET
+BT /F1 10 Tf 66 244 Td (- Executes read-only SQL and returns a Pandas DataFrame.) Tj ET
+BT /F2 11 Tf 54 215 Td (safety.py) Tj ET
+BT /F1 10 Tf 54 191 Td (safety.py validates both user questions and generated SQL. It rejects:) Tj ET
+BT /F1 10 Tf 66 170 Td (- Empty SQL.) Tj ET
+BT /F1 10 Tf 66 157 Td (- SQL comments.) Tj ET
+BT /F1 10 Tf 66 144 Td (- Multiple statements.) Tj ET
+BT /F1 10 Tf 66 131 Td (- Destructive or non-read-only keywords.) Tj ET
+BT /F1 10 Tf 66 118 Td (- Statements that are not SELECT or WITH ... SELECT.) Tj ET
+BT /F1 10 Tf 54 97 Td (Blocked keywords include INSERT, UPDATE, DELETE, DROP, ALTER, CREATE, TRUNCATE, REPLACE,) Tj ET
+BT /F1 10 Tf 54 84 Td (PRAGMA, ATTACH, DETACH, and VACUUM.) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2888 >>
+stream
+0.12 w 54 746 m 558 746 l S
+BT /F2 9 Tf 54 765 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F1 8 Tf 520 30 Td (Page 3) Tj ET
+BT /F2 11 Tf 54 734 Td (schema_validator.py) Tj ET
+BT /F1 10 Tf 54 710 Td (schema_validator.py adds schema-aware validation. It checks qualified references such as) Tj ET
+BT /F1 10 Tf 54 697 Td (Table.Column or alias.Column against real SQLite metadata and catches common LLM errors) Tj ET
+BT /F1 10 Tf 54 684 Td (before execution, including:) Tj ET
+BT /F1 10 Tf 66 663 Td (- Referencing a table or alias not present in FROM or JOIN.) Tj ET
+BT /F1 10 Tf 66 650 Td (- Referencing a column that does not exist on the selected table.) Tj ET
+BT /F1 10 Tf 66 637 Td (- Using a qualified reference from the wrong table.) Tj ET
+BT /F2 14 Tf 54 608 Td (4. Evaluation Summary) Tj ET
+BT /F1 10 Tf 54 581 Td (The evaluation file is evaluation.csv.) Tj ET
+BT /F1 10 Tf 54 560 Td (It contains 30 test cases, exceeding the required minimum of 20. The columns are:) Tj ET
+BT /F1 10 Tf 66 539 Td (- Level) Tj ET
+BT /F1 10 Tf 66 526 Td (- Question) Tj ET
+BT /F1 10 Tf 66 513 Td (- Expected SQL) Tj ET
+BT /F1 10 Tf 66 500 Td (- Generated SQL) Tj ET
+BT /F1 10 Tf 66 487 Td (- Pass/Fail) Tj ET
+BT /F1 10 Tf 66 474 Td (- Notes) Tj ET
+BT /F1 10 Tf 54 453 Td (Current evaluation status:) Tj ET
+BT /F3 9 Tf 62 432 Td (Category   Count) Tj ET
+BT /F3 9 Tf 62 419 Td (Simple   5) Tj ET
+BT /F3 9 Tf 62 406 Td (Intermediate   7) Tj ET
+BT /F3 9 Tf 62 393 Td (Advanced   6) Tj ET
+BT /F3 9 Tf 62 380 Td (Edge case   2) Tj ET
+BT /F3 9 Tf 62 367 Td (Advanced Extra   6) Tj ET
+BT /F3 9 Tf 62 354 Td (Safety   4) Tj ET
+BT /F3 9 Tf 62 341 Td (Total   30) Tj ET
+BT /F1 10 Tf 54 320 Td (All 30 rows are currently marked PASS.) Tj ET
+BT /F1 10 Tf 54 299 Td (The evaluation covers:) Tj ET
+BT /F1 10 Tf 66 278 Td (- Simple counting and listing.) Tj ET
+BT /F1 10 Tf 66 265 Td (- Joins across artists, albums, tracks, customers, invoices, and employees.) Tj ET
+BT /F1 10 Tf 66 252 Td (- Aggregations and revenue calculations.) Tj ET
+BT /F1 10 Tf 66 239 Td (- Advanced grouped analytics.) Tj ET
+BT /F1 10 Tf 66 226 Td (- Edge cases returning zero rows.) Tj ET
+BT /F1 10 Tf 66 213 Td (- Safety prompts and SQL injection-style destructive requests.) Tj ET
+BT /F2 14 Tf 54 184 Td (5. Failure Case Analysis) Tj ET
+BT /F1 10 Tf 54 157 Td (Several difficult cases were identified during testing and then improved with general prompt) Tj ET
+BT /F1 10 Tf 54 144 Td (and validation rules:) Tj ET
+BT /F2 11 Tf 54 115 Td (Aggregating at the wrong grain) Tj ET
+BT /F1 10 Tf 54 91 Td (For questions such as customers spending more than the average in their country, the model) Tj ET
+BT /F1 10 Tf 54 78 Td (may compare individual invoice rows instead of first summing spending per customer. The fix) Tj ET
+BT /F1 10 Tf 54 65 Td (is a general rule: aggregate detail rows at the requested entity grain before comparing) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 3432 >>
+stream
+0.12 w 54 746 m 558 746 l S
+BT /F2 9 Tf 54 765 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F1 8 Tf 520 30 Td (Page 4) Tj ET
+BT /F1 10 Tf 54 734 Td (totals, averages, maximums, minimums, or ranks.) Tj ET
+BT /F2 11 Tf 54 705 Td (Missing requested metrics) Tj ET
+BT /F1 10 Tf 54 681 Td (For questions asking for both revenue and sold count, the model may return only one metric.) Tj ET
+BT /F1 10 Tf 54 668 Td (The prompt now instructs the model to calculate and return every requested metric) Tj ET
+BT /F1 10 Tf 54 655 Td (explicitly.) Tj ET
+BT /F2 11 Tf 54 626 Td (Top item per group) Tj ET
+BT /F1 10 Tf 54 602 Td (For questions such as the top revenue-generating artist in each country, the model may) Tj ET
+BT /F1 10 Tf 54 589 Td (produce invalid alias or subquery references. The prompt and repair prompt now recommend a) Tj ET
+BT /F1 10 Tf 54 576 Td (CTE with ROW_NUMBER\(\) OVER \(PARTITION BY group ORDER BY metric DESC/ASC\) and filtering to) Tj ET
+BT /F1 10 Tf 54 563 Td (row number 1.) Tj ET
+BT /F2 11 Tf 54 534 Td (Optional related data) Tj ET
+BT /F1 10 Tf 54 510 Td (For questions including support representatives or optional related entities, an inner join) Tj ET
+BT /F1 10 Tf 54 497 Td (can hide rows with missing related records. The prompt now recommends LEFT JOIN and COALESCE) Tj ET
+BT /F1 10 Tf 54 484 Td (where optional information may be missing.) Tj ET
+BT /F2 11 Tf 54 455 Td (Schema hallucination) Tj ET
+BT /F1 10 Tf 54 431 Td (The model can still propose table or column names that do not exist. This is mitigated by) Tj ET
+BT /F1 10 Tf 54 418 Td (live schema context, strict prompt rules, and schema_validator.py.) Tj ET
+BT /F2 14 Tf 54 389 Td (6. Technical Challenges) Tj ET
+BT /F1 10 Tf 66 362 Td (- Local LLM output can be inconsistent, so the engine must parse and validate model) Tj ET
+BT /F1 10 Tf 66 349 Td (  output defensively.) Tj ET
+BT /F1 10 Tf 66 336 Td (- Complex analytical questions require the model to choose the correct result grain) Tj ET
+BT /F1 10 Tf 66 323 Td (  before writing SQL.) Tj ET
+BT /F1 10 Tf 66 310 Td (- SQLite date and ranking logic requires specific syntax such as strftime and window) Tj ET
+BT /F1 10 Tf 66 297 Td (  functions.) Tj ET
+BT /F1 10 Tf 66 284 Td (- SQL safety must be enforced outside the LLM because prompt instructions alone are not) Tj ET
+BT /F1 10 Tf 66 271 Td (  enough.) Tj ET
+BT /F1 10 Tf 66 258 Td (- Schema validation is useful but remains a practical checker, not a complete SQL) Tj ET
+BT /F1 10 Tf 66 245 Td (  parser.) Tj ET
+BT /F1 10 Tf 66 232 Td (- The app depends on a local Ollama server and the configured model being available.) Tj ET
+BT /F2 14 Tf 54 203 Td (7. Improvements Made) Tj ET
+BT /F1 10 Tf 66 176 Td (- Added user-input validation before model invocation.) Tj ET
+BT /F1 10 Tf 66 163 Td (- Added SQL safety validation before database execution.) Tj ET
+BT /F1 10 Tf 66 150 Td (- Added schema-aware validation for table and column references.) Tj ET
+BT /F1 10 Tf 66 137 Td (- Added a general SQL repair step.) Tj ET
+BT /F1 10 Tf 66 124 Td (- Strengthened prompt rules for grouped analytics, averages, rankings, requested) Tj ET
+BT /F1 10 Tf 66 111 Td (  metrics, alias scope, and optional joins.) Tj ET
+BT /F1 10 Tf 66 98 Td (- Added automatic database download when Chinook_Sqlite.sqlite is missing.) Tj ET
+BT /F1 10 Tf 66 85 Td (- Updated README setup instructions.) Tj ET
+BT /F1 10 Tf 66 72 Td (- Added a PDF report artifact.) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 1903 >>
+stream
+0.12 w 54 746 m 558 746 l S
+BT /F2 9 Tf 54 765 Td (Text-to-SQL Assistant Report) Tj ET
+BT /F1 8 Tf 520 30 Td (Page 5) Tj ET
+BT /F2 14 Tf 54 718 Td (8. Current Limitations) Tj ET
+BT /F1 10 Tf 66 691 Td (- No conversation memory or follow-up question history.) Tj ET
+BT /F1 10 Tf 66 678 Td (- The generated SQL can still be verbose or include unnecessary joins.) Tj ET
+BT /F1 10 Tf 66 665 Td (- The repair step improves reliability but cannot guarantee correctness for every query.) Tj ET
+BT /F1 10 Tf 66 652 Td (- The schema validator does not fully parse every possible SQL construct.) Tj ET
+BT /F1 10 Tf 66 639 Td (- The system currently targets SQLite syntax.) Tj ET
+BT /F1 10 Tf 66 626 Td (- Result visualizations and CSV export are not implemented.) Tj ET
+BT /F2 14 Tf 54 597 Td (9. Future Improvements) Tj ET
+BT /F1 10 Tf 66 570 Td (- Add conversation memory for follow-up questions.) Tj ET
+BT /F1 10 Tf 66 557 Td (- Add an automated evaluation runner that executes every row in evaluation.csv.) Tj ET
+BT /F1 10 Tf 66 544 Td (- Add charts for revenue, ranking, and time-series questions.) Tj ET
+BT /F1 10 Tf 66 531 Td (- Add downloadable result exports.) Tj ET
+BT /F1 10 Tf 66 518 Td (- Add deeper SQL parsing for validation.) Tj ET
+BT /F1 10 Tf 66 505 Td (- Add support for other SQL dialects and databases.) Tj ET
+BT /F2 14 Tf 54 476 Td (10. Conclusion) Tj ET
+BT /F1 10 Tf 54 449 Td (The project satisfies the main requirements for a local Text-to-SQL assistant: it accepts) Tj ET
+BT /F1 10 Tf 54 436 Td (natural-language questions, generates SQL, displays SQL before execution, executes only safe) Tj ET
+BT /F1 10 Tf 54 423 Td (read-only queries, shows results in Gradio, handles invalid and unsafe inputs gracefully,) Tj ET
+BT /F1 10 Tf 54 410 Td (logs executions, includes a populated evaluation sheet, and provides written documentation) Tj ET
+BT /F1 10 Tf 54 397 Td (and a PDF report.) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000142 00000 n 
+0000000212 00000 n 
+0000000287 00000 n 
+0000000355 00000 n 
+0000003282 00000 n 
+0000003428 00000 n 
+0000006537 00000 n 
+0000006683 00000 n 
+0000009624 00000 n 
+0000009772 00000 n 
+0000013257 00000 n 
+0000013405 00000 n 
+0000015361 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+15509
+%%EOF
