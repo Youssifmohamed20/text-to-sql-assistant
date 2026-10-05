@@ -2,6 +2,10 @@
 
 This project is a local Text-to-SQL assistant for the Chinook SQLite database. It accepts a natural-language question, generates SQLite SQL with LangChain and Ollama, validates that the query is read-only, executes it, and displays the generated SQL, explanation, results, and status in Gradio.
 
+## Demo
+
+![Text-to-SQL Assistant Demo](assets/demo.png)
+
 ## Features
 
 - Natural-language question input through Gradio.
